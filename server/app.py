@@ -55,7 +55,7 @@ def upload_file():
             "Portfolio Weight pct": "Portfolio Weight (%)"
         })
 
-        raw_portfolio.index += 1
+        raw_portfolio_clean.index += 1
         raw_portfolio_html = raw_portfolio_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=True,
                                                    border=0).replace("<th", "<th class='text-left'")
