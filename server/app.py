@@ -44,7 +44,9 @@ def upload_file():
         raw_portfolio["Portfolio Weight pct"] = (raw_portfolio.PositionValue * 100 / raw_portfolio.PositionValue.sum()).round(2)
         raw_portfolio = raw_portfolio.sort_values(by="Portfolio Weight pct", ascending=False).reset_index(drop=True)
         raw_portfolio.index += 1
-        raw_portfolio_html = raw_portfolio.to_html(classes="table w-full text-sm text-left text-gray-500")
+        raw_portfolio_html = raw_portfolio.to_html(classes="table w-full text-sm text-left text-gray-500",
+                                                   index=True,
+                                                   border=0).replace("<th", "<th class='text-left'")
         #print(raw_portfolio)  
 
         # 2. Portfolio decomposition
@@ -60,8 +62,12 @@ def upload_file():
         stocks_df.index += 1
         sectors_df.index += 1
 
-        stocks_html = stocks_df.to_html(classes="table w-full text-sm text-left text-gray-500")
-        sectors_html = sectors_df.to_html(classes="table w-full text-sm text-left text-gray-500")
+        stocks_html = stocks_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+                                                   index=True,
+                                                   border=0).replace("<th", "<th class='text-left'")
+        sectors_html = sectors_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+                                                   index=True,
+                                                   border=0).replace("<th", "<th class='text-left'")
 
         #print(stocks_df.head())
         #print(sectors_df)
@@ -104,12 +110,11 @@ def upload_file():
             active_weights_df[["weight_portfolio", "weight_benchmark", "active_weight"]] * 100
         ).round(2)
 
-        # Add index starting from 1
-        active_weights_df.index = range(1, len(active_weights_df) + 1)
-        active_weights_df.reset_index(inplace=True)
-        active_weights_df.rename(columns={"index": "#"}, inplace=True)
+        active_weights_df.index+=1
 
-        active_weights_html = active_weights_df.to_html(classes="table w-full text-sm text-left text-gray-500", index=False)
+        active_weights_html = active_weights_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+                                                   index=True,
+                                                   border=0).replace("<th", "<th class='text-left'")
         #print(active_weights_df)
 
         # 4. Attribution
@@ -153,14 +158,13 @@ def upload_file():
         ).round(2)
 
         # --- Sort by date descending ---
-        attribution_df = attribution_df.sort_values(by="date", ascending=False)
+        attribution_df = attribution_df.sort_values(by="date", ascending=False).reset_index(drop=True)
 
-        # --- Add index starting from 1 ---
-        attribution_df.index = range(1, len(attribution_df) + 1)
-        attribution_df.reset_index(inplace=True)
-        attribution_df.rename(columns={"index": "#"}, inplace=True)
+        #attribution_df.index+=1
 
-        attribution_html = attribution_df.to_html(classes="table w-full text-sm text-left text-gray-500", index=False)
+        attribution_html = attribution_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+                                                   index=False,
+                                                   border=0).replace("<th", "<th class='text-left'")
 
         return jsonify({
             "raw_portfolio": raw_portfolio_html,
