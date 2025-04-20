@@ -43,8 +43,20 @@ def upload_file():
         raw_portfolio = ( raw_portfolio.loc[:, keep_cols].copy() )     # keep only the requested columns and make a copy
         raw_portfolio["Portfolio Weight pct"] = (raw_portfolio.PositionValue * 100 / raw_portfolio.PositionValue.sum()).round(2)
         raw_portfolio = raw_portfolio.sort_values(by="Portfolio Weight pct", ascending=False).reset_index(drop=True)
+        
+
+        raw_portfolio_clean=raw_portfolio.copy()
+        raw_portfolio_clean = raw_portfolio_clean.rename(columns={
+            "Symbol": "Ticker",
+            "Description": "Security Name",
+            "PositionValue": "Position Value ($)",
+            "AssetClass": "Asset Class",
+            "SubCategory": "Sub-Category",
+            "Portfolio Weight pct": "Portfolio Weight (%)"
+        })
+
         raw_portfolio.index += 1
-        raw_portfolio_html = raw_portfolio.to_html(classes="table w-full text-sm text-left text-gray-500",
+        raw_portfolio_html = raw_portfolio_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=True,
                                                    border=0).replace("<th", "<th class='text-left'")
         #print(raw_portfolio)  
@@ -55,17 +67,33 @@ def upload_file():
         sectors_df = port_decomposer.decompose_sectors()
         #print(stocks_df)
         #print(sectors_df)
+        stocks_df_clean = stocks_df.copy()
+        sectors_df_clean = sectors_df.copy()
 
-        if stocks_df.empty and sectors_df.empty:
+        # Rename columns safely
+        stocks_df_clean = stocks_df_clean.rename(columns={
+            "ticker": "Ticker",
+            "name": "Security Name",
+            "allocation": "Position Value ($)",
+            "port_weight_pct": "Portfolio Weight (%)"
+        })
+
+        sectors_df_clean = sectors_df_clean.rename(columns={
+            "gics_sector": "GICS Sector",
+            "allocation": "Position Value ($)",
+            "port_weight_pct": "Portfolio Weight (%)"
+        })
+
+        if stocks_df_clean.empty and sectors_df_clean.empty:
             return jsonify({"error": "No valid stocks or sectors found in your portfolio."}), 200
 
-        stocks_df.index += 1
-        sectors_df.index += 1
+        stocks_df_clean.index += 1
+        sectors_df_clean.index += 1
 
-        stocks_html = stocks_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+        stocks_html = stocks_df_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=True,
                                                    border=0).replace("<th", "<th class='text-left'")
-        sectors_html = sectors_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+        sectors_html = sectors_df_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=True,
                                                    border=0).replace("<th", "<th class='text-left'")
 
@@ -110,9 +138,19 @@ def upload_file():
             active_weights_df[["weight_portfolio", "weight_benchmark", "active_weight"]] * 100
         ).round(2)
 
-        active_weights_df.index+=1
+        active_weights_clean = active_weights_df.copy()
 
-        active_weights_html = active_weights_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+        # Rename columns
+        active_weights_clean = active_weights_clean.rename(columns={
+            "gics_sector": "GICS Sector",
+            "weight_portfolio": "Portfolio Weight (%)",
+            "weight_benchmark": "Benchmark Weight (%)",
+            "active_weight": "Active Weight (%)"
+        })
+
+        active_weights_clean.index+=1
+
+        active_weights_html = active_weights_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=True,
                                                    border=0).replace("<th", "<th class='text-left'")
         #print(active_weights_df)
@@ -160,9 +198,17 @@ def upload_file():
         # --- Sort by date descending ---
         attribution_df = attribution_df.sort_values(by="date", ascending=False).reset_index(drop=True)
 
-        #attribution_df.index+=1
+        attribution_df_clean=attribution_df.copy()
 
-        attribution_html = attribution_df.to_html(classes="table w-full text-sm text-left text-gray-500",
+        # Rename columns
+        attribution_df_clean = attribution_df_clean.rename(columns={
+            "date": "Date",
+            "allocation_effect": "Allocation Effect (%)",
+            "selection_effect": "Selection Effect (%)",
+            "total_active_return": "Total Active Return (%)"
+        })
+
+        attribution_html = attribution_df_clean.to_html(classes="table w-full text-sm text-left text-gray-500",
                                                    index=False,
                                                    border=0).replace("<th", "<th class='text-left'")
 
