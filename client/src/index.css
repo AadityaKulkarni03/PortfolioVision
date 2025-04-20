@@ -1,0 +1,74 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83% 53.3%;
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-finance-blue-600 hover:bg-finance-blue-700 text-white font-medium py-2 px-6 rounded-md transition-all duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-finance-gray-100 text-finance-blue-600 border border-finance-blue-600 font-medium py-2 px-6 rounded-md transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-semibold text-finance-gray-900 font-display mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-lg text-finance-gray-600 max-w-3xl mx-auto mb-12;
+  }
+  
+  .feature-card {
+    @apply p-6 rounded-xl bg-white border border-finance-gray-200 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  
+  .feature-icon {
+    @apply p-3 rounded-lg bg-finance-blue-100 text-finance-blue-600 mb-4 inline-flex;
+  }
+}
