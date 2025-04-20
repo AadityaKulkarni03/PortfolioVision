@@ -45,8 +45,8 @@ const PortfolioUploader: React.FC = () => {
 
     try {
       // Determine the correct API URL based on the environment
-      const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiUrl = isLocalDev ? 'http://localhost:5000/upload' : '/api/upload';
+      const apiUrl = import.meta.env.VITE_API_URL + '/upload';
+      console.log(`Uploading file to: ${apiUrl}`);
 
       const response = await fetch(apiUrl, {
       method: "POST",
