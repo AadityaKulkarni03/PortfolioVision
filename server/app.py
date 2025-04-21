@@ -74,13 +74,13 @@ def upload_file():
         stocks_df_clean = stocks_df_clean.rename(columns={
             "ticker": "Ticker",
             "name": "Security Name",
-            "allocation": "Position Value ($)",
+            "allocation": "Portfolio Allocation ($)",
             "port_weight_pct": "Portfolio Weight (%)"
         })
 
         sectors_df_clean = sectors_df_clean.rename(columns={
             "gics_sector": "GICS Sector",
-            "allocation": "Position Value ($)",
+            "allocation": "Portfolio Allocation ($)",
             "port_weight_pct": "Portfolio Weight (%)"
         })
 
